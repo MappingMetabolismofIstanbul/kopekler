@@ -1,177 +1,147 @@
-- [Interactive Storytelling](#interactive-storytelling)
-  - [Live Demo](#live demo)
-  - [Prerequisites](#prerequisites)
-  - [Getting Started](#getting-started)
-    - [Steps](#steps)
-    - [Generate Map Position Using `Helper.html`](#generate-map-position-using-helperhtml)
-    - [Configuration File and Layer Settings](#configuration-file-and-layer-settings)
-    - [Configuration Options](#configuration-options)
-    - [Mapbox Studio Style Configuration](#mapbox-studio-style-configuration)
-    - [Organization](#organization)
-  - [Deployment](#deployment)
-  - [Built With](#built-with)
-  - [Authors](#authors)
-  - [License](#license)
-  - [Acknowledgments](#acknowledgments)
-
-# Updated to Mapbox GL JS V2.0.0
-- Set `use3dTerrain: true` for 3D maps
-
-![3D mountains in Colorado](assets/co14ersstory.gif)
-
-# Interactive Storytelling
-Some stories are best told with a map. Data journalists covering changing conditions in a population's demographics, the environment, an international conflict, or telling a simple travel story frequently provide geographic context in their graphics.
-
-This template is designed to accelerate building out a "scrollytelling" map story. The primary input is a story broken into sections (`chapters`), each hooked to a particular view of a map.
-
-Optionally, you can input a custom Mapbox Style with layers styled in Studio and toggle the layer's opacity.
-
-The output is an HTML and JavaScript file. These outputs can be hosted on any web-accessible location, with no extra code or infrastructure required. Note that embedding the output as an iFrame in another page will not work as expected. The scroll-driven interface requires the full page.
-
-## Live Demo
-
-You can view a live demo of this storytelling framework at [https://labs.mapbox.com/storytelling/](https://labs.mapbox.com/storytelling/)
-
-## Prerequisites
-This template is for data journalists and digital storytellers of any kind. If you are planning to include some custom map layers, you will need some familiarity with [Mapbox Studio](https://studio.mapbox.com).
-
-To configure and publish a story, you will need:
-- A Mapbox [access token](https://docs.mapbox.com/help/glossary/access-token). Sign up for a free account at [mapbox.com](https://www.mapbox.com/signup/) to get one.
-
-- A text editor. Visual Studio Code is a fine choice.
-
-- A place to publish your work. Any service that hosts static files that can be accessed with a browser will do. [Github Pages](https://pages.github.com/) is a good free option.
-
-- A story. This is unquestionably the hardest part. The best stories for this template will have sections that benefit from a map.
-
-- Attention to detail. The configuration file does require specific syntax and punctuation. Braces, brackets, commas, and quotes are important. Follow the `config.js.template` for guidance. Some familiarity with [JSON]('https://www.copterlabs.com/json-what-it-is-how-it-works-how-to-use-it/') is recommended.
-
-- Optionally, some spatial data in your Mapbox map. The template has options to include layer names to show and hide the data as the story sections transition. You may want to highlight a neighborhood, or show satellite data from two different times.
-
-The template does not rely on any particular CSS framework, fonts, or images. There are some basic styles in the `head` of the HTML file that can be changed, so feel free to adapt and add to these to match your site and story brand.
-
-![example story screen capture](assets/glacierdemo.gif)
-
-## Getting Started
-
-Clone this repository. Navigate to the `src/` directory.
-
-Make a copy of `config.js.template` and name it `config.js`. Open the new `config.js` file in your text editor.
-
-#### Steps
-
-1. **Select the map style** you want to use (the default is Mapbox Streets, but you can find more here https://docs.mapbox.com/api/maps/#styles, or use one of your custom Studio styles).
-
-2. **Add a Mapbox access token.** A good practice is to [create a separate](https://docs.mapbox.com/help/how-mapbox-works/access-tokens/#creating-and-managing-access-tokens) token per map to be able to track traffic to your different maps.
-
-3. **Choose whether or not to display a marker** at the center of each map location. If you are displaying markers, you can set the color using the `markerColor` property. The default color is light blue.
-
-4. **Choose a theme for the story text**. There are `light` and `dark` options.
-
-5. **Choose where your story should be aligned over the map**. Options are `center`, `left`, `right`, and `full`.
-
-```
-{
-    style: 'mapbox://styles/mapbox/streets-v11',
-    accessToken: 'YOUR_ACCESS_TOKEN',
-    showMarkers: true,
-    markerColor: '#3FB1CE',
-    theme: 'light',
-    use3dTerrain: false,
-    title: 'The Title Text of this Story',
-    subtitle: 'A descriptive and interesting subtitle to draw in the reader',
-    byline: 'By a Digital Storyteller',
-    footer: 'Source: source citations, etc.',
-    chapters: [
-    ...
-    ]
-{
-```
-
-6. **Add as many `chapters` in your template as needed.** You'll need a `,` between each section, but no comma at the end. Here is what a `chapter` looks like:
-
-```
-{
-    id: 'slug-style-id',
-    alignment: 'left',
-    hidden: false,
-    title: 'Display Title',
-    image: './path/to/image/source.png',
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-    location: {
-        center: [-122.418398, 37.759483],
-        zoom: 8.5,
-        pitch: 60,
-        bearing: 0
-    },
-    mapAnimation: 'flyTo',
-    rotateAnimation: false,
-    callback: '',
-    onChapterEnter: [],
-    onChapterExit: []
-},
-```
-
-7. **Fill out your sections as needed.**  Give each section a unique name in the section `id` property. This will become the HTML `div` `id`, so avoid spaces in the name. The `title`, `description` properties are optional. The `description` supports HTML tags. If you have an image that goes with that section of the story, add the path to the image in the `image` property.
-
-8. For `location`, you can use the `helper.html` file to help you determine the map's position. This tool prints the location settings of the map on the screen in a format ready for copy/paste into the template. Optionally, you can change the style in this file to your [custom style](https://docs.mapbox.com/mapbox-gl-js/example/custom-style-id/).
-
-9. Repeat until you have the location entered for each of your sections.
-
-10. Open `index.html` in a browser, and scroll. Voila!
-
-#### Generate Map Position 
-
-Use the [Mapbox Location Helper](https://labs.mapbox.com/location-helper/) to search for locations and get the center, zoom, pitch, and bearing for use in your storytelling map.
-
-![location helper screen capture](assets/location-helper.gif)
-
-#### Configuration File and Layer Settings
-
-Here is a sample configuration:
-
-```
 var config = {
-    style: 'mapbox://styles/branigan/cjz37rcb003ib1cr3s8rnkt2d',
-    accessToken: 'pk.eyJ1IjoibWJ4c29sdXRpb25zIiwiYSI6ImNrMm01aG9hdTBlZGwzbXQ1ZXVrNHNmejAifQ.QHQA0N6XPWddCXtvoODHZg',
-    showMarkers: false,
-    theme: 'dark',
-    use3dTerrain: true,
-    title: 'Glaciers of Glacier National Park',
-    subtitle: 'Change in coverage from 1998 to 2015',
-    byline: '',
-    footer: 'Source: Story text from Wikipedia, August 2019. Data from <a href="https://www.usgs.gov/centers/norock/science/retreat-glaciers-glacier-national-park">USGS</a>',
+    style: 'mapbox://styles/dogatmn/clyseydg9001201nu65sb3kb7',
+    accessToken: 'pk.eyJ1IjoiZG9nYXRtbiIsImEiOiJjbHlyMTJmcXgwMjQ3MmtzbTRsdm1pejdsIn0.vcEjL7lt8OoOPMP5o1PM6g',
+    showMarkers: true,
+    markerColor: '#ff70ab',
+    //projection: 'equirectangular',
+    //Read more about available projections here
+    //https://docs.mapbox.com/mapbox-gl-js/example/projections/
+    inset: true,
+    theme: 'light',
+    use3dTerrain: false, //set true for enabling 3D maps.
+    auto: false,
+    title: 'Tanzifat İskeleleri',
+    subtitle: 'Köpekler',
+    byline: 'BAP_Mapping Metabolism of Istanbul / MEF AAP_027',
+    footer: 'BAP_Mapping Metabolism of Istanbul / MEF AAP_027',
     chapters: [
         {
-            id: 'glacier-np',
+            id: '1',
             alignment: 'full',
-            title: 'Glacier National Park Glaciers',
-            image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/2015-06-19_Glacier_National_Park_%28U.S.%29_8633.jpg/800px-2015-06-19_Glacier_National_Park_%28U.S.%29_8633.jpg',
-            description: 'Glacier National Park is dominated by mountains which were carved into their present shapes by the huge glaciers of the last ice age...',
+            hidden: false,
+            title: 'Çöp Çıkaran..! Çöp Çıkaran..!',
+            image: 'https://i.ibb.co/WnWbGZ0/05-07-24-Tanzifat-skelesi-300dpi.jpg',
+            description: 'The image was created for the project titled “Interactive Mapping of İstanbul’s Metabolism (MEF AAP 027)” , funded by MEF University. Project Coordinator: Dr. Esra Sert (2024–2025).',
             location: {
-                center: [-113.91666, 48.66451],
-                zoom: 8,
-                pitch: 0.00,
-                bearing: 0.00
+                center: [28.965 , 41.003],
+                zoom: 12,
+                pitch: 0,
+                bearing: 0
             },
+            mapAnimation: 'flyTo',
+            rotateAnimation: false,
+            callback: '',
             onChapterEnter: [
-                {
-                    layer: 'gnpglaciers-1998',
-                    opacity: 0.25
-                },
-                {
-                    layer: 'glaciernp-boundary',
-                    opacity: 0.25
-                }
+                // {
+                //     layer: 'layer-name',
+                //     opacity: 1,
+                //     duration: 5000
+                // }
             ],
             onChapterExit: [
-                {
-                    layer: 'glaciernp-boundary',
-                    opacity: 0
-                }
+                // {
+                //     layer: 'layer-name',
+                //     opacity: 0
+                // }
             ]
         },
         {
+            id: '2',
+            alignment: 'left',
+            hidden: false,
+            title: 'Köpekler',
+            image: 'https://i.ibb.co/zRtGzNW/image-14.jpg',
+            description: 'Köpekler aslında çöp konusunda büyük bir yardımcılardı. Çöpleri yiyerek bir arıtıcı gibi çalışıyorlar ve insanlara yardımcı olurlardı. / İstanbul’da Bir Tanzifat Amelesi, 1880 / Street Cleaner In Istanbul, 1880 - Photo Source: SALT Reasearch - Abdullah Freres ',
+            location: {
+                center: [28.965 , 41.003],
+                zoom: 12,
+                pitch: 60,
+                bearing: -43.2
+            },
+            mapAnimation: 'flyTo',
+            rotateAnimation: false,
+            callback: '',
+            onChapterEnter: [],
+            onChapterExit: []
+        },
+        {
+            id: '3',
+            alignment: 'right',
+            hidden: false,
+            title: '',
+            image: 'https://i.ibb.co/S3M6Ts3/image-15.jpg',
+            description: '“...sokaklara atılan çöpleri ortadan kaldırmak ve gece vakti gezinenlerden kötü niyetli olanlara havlayıp saldırmaktan ibarettir...” (İbrahim Şinasi, Tasvir-i Efkar, nr. 192, 5 Mayıs 1864, Sayfa 1-3.) / Köpekler Etrafındaki Tanzifat Amelesi Eşeğiyle Beraber / Street Cleaner with His Donkey and Dogs Around - Original Photo Source: Osmanlı’dan Günümüze Temizlik İşçileri ve Aletleri Sergisi, Kağıthane Belediye Başkanlığı ',
+            location: {
+                center: [28.978 , 41.010],
+                zoom: 14,
+                pitch: 30,
+                bearing: 0
+            },
+            mapAnimation: 'flyTo',
+            rotateAnimation: false,
+            callback: '',
+            onChapterEnter: [],
+            onChapterExit: []
+        },
+        {
+            id: '4',
+            alignment: 'middle',
+            hidden: false,
+            title: '',
+            image: 'https://i.ibb.co/Hh44hwL/image-16.jpg',
+            description: 'TR: “Şunu merak ettim fakat rahat bırakmıyor!” “Korkma efendim, külhani insancıdır, siz devam ediniz!” - Photo Source: Geveze, nr: 1, 15 Ağustos 1875',
+            location: {
+                center: [28.978 , 41.010],
+                zoom: 16,
+                pitch: 0,
+                bearing: 0
+            },
+            mapAnimation: 'flyTo',
+            rotateAnimation: false,
+            callback: '',
+            onChapterEnter: [],
+            onChapterExit: []
+        },
+        {
+            id: '5',
+            alignment: 'left',
+            hidden: false,
+            title: 'Hayırsızada',
+            image: 'https://i.ibb.co/Lv3hf7C/1-page-0001.jpg',
+            description: 'Sivriada, 1910 yılında İstanbul’daki sokak köpeklerinin sürgün edildiği yer olarak bilinir. O dönemde, şehirdeki köpek nüfusu yoğunlaşmıştı ve özellikle Batılılaşma süreciyle birlikte, Osmanlı yönetimi, sokak hayvanlarını şehirden uzaklaştırmayı amaçlar. Bu karar, halk arasında büyük tepkilere yol açsa da binlerce köpek, teknelere bindirilerek İstanbul’un gözden uzak noktalarından biri olan Sivriada’ya götürülür. - Photo Source: Yeni Geveze, nr. 33, 6 Temmuz 1910, Çizen: M. Ütücüyan',
+            location: {
+                center: [28.9725, 40.8759],
+                zoom: 15,
+                pitch: 60,
+                bearing: -43.2
+            },
+            mapAnimation: 'flyTo',
+            rotateAnimation: true,
+            callback: '',
+            onChapterEnter: [],
+            onChapterExit: []
+        },
+        {
+            id: '6',
+            alignment: 'right',
+            hidden: false,
+            title: '',
+            image: 'https://i.ibb.co/vvt4PnG/2-page-0001.jpg',
+            description: 'Sivriada, adının da işaret ettiği gibi, kayalık ve zorlu bir araziye sahipti, yiyecek veya su kaynağı olmayan bir yerdi. Sürgüne gönderilen köpeklerin adada kendi başlarına hayatta kalmaları neredeyse imkansızdı. Ada sakinleri ise köpeklerin acı seslerine karşı gelemeyerek şikayette bulundular ve nihayet sürgüne yollanan köpekler yurtlarına geri getirildi. - Photo Source: Karikatürlerde İstanbul’un Sokak Köpekleri, Kemalettin Kuzucu, Sayfa 330.',
+            location: {
+                center: [28.9725, 40.8759],
+                zoom: 15,
+                pitch: 0,
+                bearing: 0
+            },
+            mapAnimation: 'flyTo',
+            rotateAnimation: false,
+            callback: '',
+            onChapterEnter: [],
+            onChapterExit: []
+        },
+    ]
+};
             id: 'harrison1998',
             alignment: 'left',
             title: 'Harrison Glacier, 1998',
